@@ -1,0 +1,20 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "description": "Dependencies deployed to AWS Lambda",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sbstjn/sqs-worker-serverless.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "alai": "^1.0.2",
+    "lawos": "^1.1.4"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "sqs-worker-serverless",
+  "version": "1.0.0",
+  "description": "Example for an Amazon SQS worker with AWS Lambda using lawos and serverless.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/jest test",
+    "deploy": "./node_modules/.bin/serverless deploy",
+    "postinstall": "cd functions && npm install"
+  },
+  "homepage": "https://github.com/sbstjn/sqs-worker-serverless",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sbstjn/sqs-worker-serverless.git"
+  },
+  "keywords": [
+    "sqs",
+    "worker",
+    "aws",
+    "lambda",
+    "serverless"
+  ],
+  "author": "Sebastian Müller <mail@sbstjn.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "aws-sdk": "^2.27.0",
+    "jasmine-data-provider": "^2.2.0",
+    "jest": "^19.0.2",
+    "serverless": "^1.8.0"
+  }
+}

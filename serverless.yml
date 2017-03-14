@@ -1,0 +1,179 @@
+service: sqs-worker-serverless
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  stage: dev
+  region: eu-west-1
+  memorySize: 128
+  iamRoleStatements:
+  - Effect: Allow
+    Action:
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+    Resource: arn:aws:dynamodb:*:*:table/${self:custom.config}
+  - Effect: Allow
+    Action:
+      - lambda:InvokeFunction
+    Resource: arn:aws:lambda:*:*:function:${self:custom.process}
+  - Effect: Allow
+    Action:
+      - sqs:DeleteMessage
+      - sqs:ReceiveMessage
+    Resource: arn:aws:sqs:*:*:${self:custom.sqs}
+
+custom:
+  region: ${self:provider.region}
+  stage: ${opt:stage, self:provider.stage}
+  prefix: ${self:custom.stage}-${self:service}
+  process: ${self:custom.prefix}-process
+  config: ${self:custom.prefix}-config
+  sns: ${self:custom.prefix}-trigger
+  sqs: ${self:custom.prefix}-messages
+
+package:
+  exclude:
+    - docs/**
+    - helpers/**
+    - node_modules/**
+    - test/**
+
+functions:
+  scale:
+    timeout: 10
+    handler: functions/scale.handler
+    name: ${self:custom.prefix}-scale
+    environment:
+      config: ${self:custom.config}
+    events:
+      - sns: ${self:custom.sns}
+
+  worker:
+    timeout: 10
+    handler: functions/worker.handler
+    name: ${self:custom.prefix}-worker
+    environment:
+      config: ${self:custom.config}
+      process: ${self:custom.process}
+    events:
+      - schedule: rate(1 minute)
+
+  process:
+    timeout: 60
+    handler: functions/process.handler
+    name: ${self:custom.prefix}-process
+    environment:
+      region: ${self:custom.region}
+      sqs: ${self:custom.sqs}
+
+resources:
+  Resources:
+
+    Messages:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.sqs}
+        MessageRetentionPeriod: 1209600
+        VisibilityTimeout: 60
+        RedrivePolicy:
+          deadLetterTargetArn:
+            Fn::GetAtt:
+            - MessagesDeadLetterQueue
+            - Arn
+          maxReceiveCount: 10
+
+    MessagesDeadLetterQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.sqs}-dead-letter-queue
+        MessageRetentionPeriod: 1209600
+
+    Config:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.config}
+        AttributeDefinitions:
+          - AttributeName: key
+            AttributeType: S
+        KeySchema:
+          - AttributeName: key
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+
+    MessagesAlarm1:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmDescription: Alarm if queue has more than 1 message
+        Namespace: AWS/SQS
+        MetricName: ApproximateNumberOfMessagesVisible
+        Dimensions:
+        - Name: QueueName
+          Value: ${self:custom.sqs}
+        Statistic: Sum
+        Period: 60
+        EvaluationPeriods: 1
+        Threshold: 1
+        ComparisonOperator: GreaterThanOrEqualToThreshold
+        AlarmActions:
+        - { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sns}" ] ]  }
+        OKActions:
+        - { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sns}" ] ]  }
+
+    MessagesAlarm100:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmDescription: Alarm if queue has more than 100 messages
+        Namespace: AWS/SQS
+        MetricName: ApproximateNumberOfMessagesVisible
+        Dimensions:
+        - Name: QueueName
+          Value: ${self:custom.sqs}
+        Statistic: Sum
+        Period: 60
+        EvaluationPeriods: 1
+        Threshold: 100
+        ComparisonOperator: GreaterThanOrEqualToThreshold
+        AlarmActions:
+        - { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sns}" ] ]  }
+        OKActions:
+        - { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sns}" ] ]  }
+
+    MessagesAlarm1000:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmDescription: Alarm if queue has more than 1000 messages
+        Namespace: AWS/SQS
+        MetricName: ApproximateNumberOfMessagesVisible
+        Dimensions:
+        - Name: QueueName
+          Value: ${self:custom.sqs}
+        Statistic: Sum
+        Period: 60
+        EvaluationPeriods: 1
+        Threshold: 1000
+        ComparisonOperator: GreaterThanOrEqualToThreshold
+        AlarmActions:
+        - { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sns}" ] ]  }
+        OKActions:
+        - { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sns}" ] ]  }
+
+    MessagesAlarm2000:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmDescription: Alarm if queue has more than 2000 messages
+        Namespace: AWS/SQS
+        MetricName: ApproximateNumberOfMessagesVisible
+        Dimensions:
+        - Name: QueueName
+          Value: ${self:custom.sqs}
+        Statistic: Sum
+        Period: 60
+        EvaluationPeriods: 1
+        Threshold: 2000
+        ComparisonOperator: GreaterThanOrEqualToThreshold
+        AlarmActions:
+        - { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sns}" ] ]  }
+        OKActions:
+        - { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.sns}" ] ]  }
