@@ -6,7 +6,8 @@
   "scripts": {
     "test": "./node_modules/.bin/jest test",
     "deploy": "./node_modules/.bin/serverless deploy",
-    "postinstall": "cd functions && npm install"
+    "postinstall": "cd functions && npm install",
+    "lint": "./node_modules/.bin/standard | ./node_modules/.bin/snazzy"
   },
   "homepage": "https://github.com/sbstjn/sqs-worker-serverless",
   "repository": {
@@ -26,6 +27,18 @@
     "aws-sdk": "^2.27.0",
     "jasmine-data-provider": "^2.2.0",
     "jest": "^19.0.2",
-    "serverless": "^1.8.0"
+    "serverless": "^1.8.0",
+    "snazzy": "^6.0.0",
+    "standard": "^9.0.2"
+  },
+  "standard": {
+    "envs": [
+      "node",
+      "jest"
+    ],
+    "ignore": [
+      "coverage",
+      "node_modules"
+    ]
   }
 }

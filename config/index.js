@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   mapping: {
@@ -7,4 +7,4 @@ module.exports = {
     1000: 5,
     2000: 10
   }
-};
+}

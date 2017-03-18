@@ -1,25 +1,25 @@
-'use strict';
+'use strict'
 
-const config = require('../config');
-const scale = require('../lib/scale.js');
+const config = require('../config')
+const scale = require('../lib/scale.js')
 
-function parse(name) {
-  const regex = /(OK|ALARM):(.*)MessagesAlarm([0-9]*)/g;
-  const match = regex.exec(name);
+function parse (name) {
+  const regex = /(OK|ALARM):(.*)MessagesAlarm([0-9]*)/g
+  const match = regex.exec(name)
 
   if (match && match[1]) {
-    const direction = match[1] === 'ALARM' ? 1 : -1;
-    return direction * config.mapping[parseInt(match[3], 10)];
+    const direction = match[1] === 'ALARM' ? 1 : -1
+    return direction * config.mapping[parseInt(match[3], 10)]
   }
 
-  return 0;
+  return 0
 }
 
-function handler(event, context, callback) {
-  var change = 0;
+function handler (event, context, callback) {
+  var change = 0
 
   try {
-    change = parse(event.Records[0].Sns.Subject);
+    change = parse(event.Records[0].Sns.Subject)
   } catch (e) {}
 
   scale.get().then(
@@ -32,7 +32,7 @@ function handler(event, context, callback) {
     console.log
   ).then(
     callback
-  );
+  )
 }
 
-module.exports = { parse, handler };
+module.exports = { parse, handler }

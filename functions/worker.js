@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
-const AWS = require("aws-sdk");
-const LAMBDA = new AWS.Lambda({apiVersion: '2015-03-31'});
+const AWS = require('aws-sdk')
+const LAMBDA = new AWS.Lambda({apiVersion: '2015-03-31'})
 
-const scale = require('../lib/scale.js');
+const scale = require('../lib/scale.js')
 
-module.exports.handler = function(event, context, callback) {
+module.exports.handler = function (event, context, callback) {
   scale.get().then(
     count => Array.apply(null, Array(count)).map(
       (_, index) => LAMBDA.invoke(
@@ -15,7 +15,7 @@ module.exports.handler = function(event, context, callback) {
           LogType: 'None'
         },
         () => {
-            console.log('started', index + 1);
+          console.log('started', index + 1)
         }
       )
     ).length
@@ -25,5 +25,5 @@ module.exports.handler = function(event, context, callback) {
     console.log
   ).then(
     callback
-  );
-};
+  )
+}
