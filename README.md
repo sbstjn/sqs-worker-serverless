@@ -30,11 +30,3 @@ $ > wrk -c35 -d60 -t35 \
     -s helpers/wrk.lua \
     https://sqs.REGION.amazonaws.com/ACCOUNT-ID/YourQueueName
 ```
-
-## Scaling
-
-![Scaling](docs/scale.png)
-
-## Worker
-
-![Scaling](docs/worker.png)
