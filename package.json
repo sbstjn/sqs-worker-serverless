@@ -40,5 +40,8 @@
       "coverage",
       "node_modules"
     ]
+  },
+  "dependencies": {
+    "serverless-sqs-alarms-plugin": "^0.0.2"
   }
 }
