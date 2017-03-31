@@ -1,31 +1,40 @@
-## ⚡️ SQS Worker with Serverless
+# ⚡️ SQS Worker with Serverless
 
 [![license](https://img.shields.io/github/license/sbstjn/lawos.svg)](https://github.com/sbstjn/sqs-worker-serverless/blob/master/LICENSE.md)
 [![CircleCI](https://img.shields.io/circleci/project/github/sbstjn/sqs-worker-serverless/master.svg)](https://circleci.com/gh/sbstjn/lawos)
 
 Example code for an Amazon SQS worker with AWS Lambda using [lawos](https://github.com/sbstjn/lawos) and [serverless](https://serverless.com).
 
+## Setup
+
+- SQS Queue with your messages
+- SNS Topic to handle CloudWatch Alarms
+- DynamoDB table to persist configuration
+- CloudWatch Schedule as cron replacement
+- Three (`scale`, `worker`, `process`) AWS Lambda functions
+
 ## Workflow
 
-- CloudWatch Alarms for queue length trigger `scale` function
-- Lambda function `scale` updates configuration in DynamoDB 
-- CloudWatch Schedule starts `worker` every X minute(s)
-- Lambda function `worker` reads configuration from DynamoDB
-- Lambda function `worker` invokes `process` function(s)
+- CloudWatch Alarms on queue length post to SNS
+- SNS Topic triggers `scale` Lambda function
+- Function `scale` updates configuration in DynamoDB 
+- CloudWatch Schedule invokes `worker` every `x` minute(s)
+- Function `worker` reads configuration from DynamoDB
+- Function `worker` invokes `process` function(s)
 
-### Auto-Scaling with CloudWatch Alerts
+## Auto-Scaling with CloudWatch Alerts
 
 ![](./docs/scale.png) 
 
-### Invoke workers with CloudWatch Schedule
+## Workers with CloudWatch Schedule
 
 ![](./docs/worker.png)
 
 ## Deploy
 
 ```bash
-$ > npm install
-$ > npm run deploy
+$ > yarn install
+$ > yarn deploy
 ```
 
 ## Add noise to SQS
