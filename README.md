@@ -7,11 +7,19 @@ Example code for an Amazon SQS worker with AWS Lambda using [lawos](https://gith
 
 ## Workflow
 
-- CloudWatch Alarms for queue length trigger `scale`
-- Lambda function `scale` updates the DynamoDB configuration
+- CloudWatch Alarms for queue length trigger `scale` function
+- Lambda function `scale` updates configuration in DynamoDB 
 - CloudWatch Schedule starts `worker` every X minute(s)
 - Lambda function `worker` reads configuration from DynamoDB
 - Lambda function `worker` invokes `process` function(s)
+
+### Auto-Scaling with CloudWatch Alerts
+
+![](./docs/scale.png) 
+
+### Invoke workers with CloudWatch Schedule
+
+![](./docs/worker.png)
 
 ## Deploy
 
