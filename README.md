@@ -1,11 +1,12 @@
-# ⚡️ SQS Worker with Serverless
+# SQS Worker with Serverless ⚡️
 
-[![license](https://img.shields.io/github/license/sbstjn/lawos.svg)](https://github.com/sbstjn/sqs-worker-serverless/blob/master/LICENSE.md)
-[![CircleCI](https://img.shields.io/circleci/project/github/sbstjn/sqs-worker-serverless/master.svg)](https://circleci.com/gh/sbstjn/sqs-worker-serverless)
+[![MIT License](https://badgen.now.sh/badge/License/MIT/blue)](https://github.com/sbstjn/sqs-worker-serverless/blob/master/LICENSE.md)
+[![Read Tutorial](https://badgen.now.sh/badge/Read/Tutorial/orange)](https://sbstjn.com/serverless-sqs-worker-with-aws-lambda.html)
 
-Experiment for an Amazon SQS worker with AWS Lambda using [lawos](https://github.com/sbstjn/lawos) and [serverless](https://serverless.com).
 
-More details: [Serverless Amazon SQS Worker with AWS Lambda](https://sbstjn.com/serverless-sqs-worker-with-aws-lambda.html)
+Experimental [Serverless Amazon SQS Worker with AWS Lambda](https://sbstjn.com/serverless-sqs-worker-with-aws-lambda.html).
+
+***Update:** Please see [Serverless Analytics](https://github.com/sbstjn/serverless-analytics) for a more realistic setup using Amazon Kinesis Streams to process your data and events. You can read more about the Kinesis and Lambda connection at [Serverless Analytics with Amazon Kinesis and AWS Lambda](https://sbstjn.com/serverless-analytics-with-kinesis-stream-lambda.html). This was only intended as an April Fools' project …* 
 
 ## Setup
 
